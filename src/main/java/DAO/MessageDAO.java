@@ -19,7 +19,12 @@ public class MessageDAO {
             ps.setString(2, message.getMessage_text());
             ps.setLong(2, message.getTime_posted_epoch());
             ps.executeUpdate();
-            return message;
+            ResultSet pkeyResultSet = ps.getGeneratedKeys();
+            if(pkeyResultSet.next()){
+                int generated_message_id = (int) pkeyResultSet.getLong(1);
+                //return registered account with its id
+                return new Message(generated_message_id, message.getPosted_by(), message.getMessage_text(), message.getTime_posted_epoch());
+            }
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
@@ -70,19 +75,16 @@ public class MessageDAO {
     }
 
     //6: Our API should be able to delete a message identified by a message ID.
-    public Message deleteMessageById(int id) {
+    public void deleteMessageById(int id) {
         Connection conn = ConnectionUtil.getConnection();
         try {
-            Message deletedMessage = this.getMessageById(id);
             String sql = "DELETE FROM message WHERE message_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             ps.executeUpdate();
-            return deletedMessage;
         } catch(SQLException e){
             System.out.println(e.getMessage());
         }
-        return null;
     }
 
     //7: Our API should be able to update a message text identified by a message ID

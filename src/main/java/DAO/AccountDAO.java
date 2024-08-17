@@ -39,7 +39,13 @@ public class AccountDAO {
             ps.setString(2, account.getPassword());
 
             ps.executeUpdate();
-            return account;
+            //get the generated id for the inserted account
+            ResultSet pkeyResultSet = ps.getGeneratedKeys();
+            if(pkeyResultSet.next()){
+                int generated_account_id = (int) pkeyResultSet.getLong(1);
+                //return registered account with its id
+                return new Account(generated_account_id, account.getUsername(), account.getPassword());
+            }
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
@@ -60,7 +66,8 @@ public class AccountDAO {
 
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                return account;
+                //return the logged in account
+                return new Account(rs.getInt("account_id"), rs.getString("username"), rs.getString("password"));
             }
         }catch(SQLException e){
             System.out.println(e.getMessage());
