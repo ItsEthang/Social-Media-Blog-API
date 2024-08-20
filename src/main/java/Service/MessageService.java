@@ -45,13 +45,15 @@ public class MessageService {
     }
 
     // update message by id
-    public Message updateMessageById(int id, String text) {
+    public Message updateMessageById(int id, Message message) {
         Message messageToUpdate = this.messageDAO.getMessageById(id);
-        int textLength = text.length();
+        int textLength = message.getMessage_text().length();
 
-        if (!(messageToUpdate == null) && textLength > 0 && textLength < 256) {
-            return this.messageDAO.updateMessageById(id, text);
+        if (!(messageToUpdate == null) && !message.getMessage_text().isBlank() && textLength < 256) {
+            this.messageDAO.updateMessageById(id, message);
+            return this.messageDAO.getMessageById(id);
         }
+
         return null;
     }
 
