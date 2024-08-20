@@ -14,18 +14,19 @@ public class AccountService {
         this.accountDAO = accountDAO;
     }
 
-    //Account register service
+    // Account register service
     public Account accountRegister(Account account) {
         String username = account.getUsername();
         String password = account.getPassword();
         Account accountByUser = accountDAO.getAccountByUsername(username);
-        boolean isValidAccount = username.length() > 0 && password.length() > 3 && accountByUser.equals(null);
+        boolean isValidAccount = username.length() > 0 && password.length() > 3 && accountByUser == null;
 
-        if (isValidAccount) return this.accountDAO.insertAccount(account);
+        if (isValidAccount)
+            return this.accountDAO.insertAccount(account);
         return null;
     }
 
-    //Account login
+    // Account login
     public Account accountLogin(Account account) {
         return this.accountDAO.accountLogin(account);
     }

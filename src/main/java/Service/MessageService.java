@@ -16,8 +16,8 @@ public class MessageService {
         this.messageDAO = messageDAO;
     }
 
-    //create message
-    public Message createMessage(Message message){
+    // create message
+    public Message createMessage(Message message) {
         int messageLength = message.getMessage_text().length();
         if (messageLength > 0 && messageLength < 256) {
             return this.messageDAO.insertMessage(message);
@@ -25,37 +25,38 @@ public class MessageService {
         return null;
     }
 
-    //retrieve all messages
-    public List<Message> getAllMessages(){
+    // retrieve all messages
+    public List<Message> getAllMessages() {
         return this.messageDAO.getAllMessages();
     }
 
-    //retrieve a message by its ID
+    // retrieve a message by its ID
     public Message getMessageById(int id) {
         return this.messageDAO.getMessageById(id);
     }
 
-    //delete message by id
+    // delete message by id
     public Message deleteMessageById(int id) {
         Message messageToDelete = this.messageDAO.getMessageById(id);
-        if (messageToDelete.equals(null)) return null;
+        if (messageToDelete == null)
+            return null;
         this.messageDAO.deleteMessageById(id);
         return messageToDelete;
     }
 
-    //update message by id
+    // update message by id
     public Message updateMessageById(int id, String text) {
         Message messageToUpdate = this.messageDAO.getMessageById(id);
         int textLength = text.length();
 
-        if (!messageToUpdate.equals(null) && textLength > 0 && textLength < 256) {
+        if (!(messageToUpdate == null) && textLength > 0 && textLength < 256) {
             return this.messageDAO.updateMessageById(id, text);
         }
         return null;
     }
 
-    //retrieve all messages by user
-    public List<Message> getAllMessagesByUser(int userId){
+    // retrieve all messages by user
+    public List<Message> getAllMessagesByUser(int userId) {
         return this.messageDAO.getAllMessagesByUser(userId);
     }
 }
